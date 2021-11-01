@@ -16,6 +16,7 @@ import org.apache.spark.sql.types.{ArrayType, DoubleType, IntegerType, LongType,
    * Send atleast one record and then run program
    *kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic notifications --from-beginning
    */
+
 object a5_SparkKafkaSink extends Serializable {
   def main(args: Array[String]): Unit = {
 

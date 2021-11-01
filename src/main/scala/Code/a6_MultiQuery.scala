@@ -111,6 +111,7 @@ object a6_MultiQuery extends Serializable {
     //Both of the queries will run in parallel
     //by below command and and application will stop only in one condition if any query fails or program is stopped for maintenance
 
+
     logger.info("Waiting for Queries")
     spark.streams.awaitAnyTermination()//If sny onr of the query is terminated the program will stop.
   }
