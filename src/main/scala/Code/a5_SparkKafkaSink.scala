@@ -97,28 +97,8 @@ object a5_SparkKafkaSink extends Serializable {
 
     logger.info("Listening and writing to Kafka")
 
-    val explodeDF = valueDF.selectExpr("value.InvoiceNumber", "value.CreatedTime", "value.StoreID",
-      "value.PosID", "value.CustomerType", "value.PaymentMethod", "value.DeliveryType", "value.DeliveryAddress.City",
-      "value.DeliveryAddress.State", "value.DeliveryAddress.PinCode", "explode(value.InvoiceLineItems) as LineItem")
 
-    val flattenedDF = explodeDF
-      .withColumn("ItemCode", expr("LineItem.ItemCode"))
-      .withColumn("ItemDescription", expr("LineItem.ItemDescription"))
-      .withColumn("ItemPrice", expr("LineItem.ItemPrice"))
-      .withColumn("ItemQty", expr("LineItem.ItemQty"))
-      .withColumn("TotalValue", expr("LineItem.TotalValue"))
-      .drop("LineItem")
-
-    val invoiceWriterQuery = flattenedDF.writeStream
-      .format("json")
-      .queryName("Flattened Invoice Writer")
-      .outputMode("append")
-      .option("path", "output")
-      .option("checkpointLocation", "chk-point-dir/flatten")
-      .start()
-
-    logger.info("Waiting for Queries")
-    spark.streams.awaitAnyTermination()
+    notificationWriterQuery.awaitTermination()
 
 
   }
